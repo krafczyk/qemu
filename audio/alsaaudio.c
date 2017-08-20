@@ -338,7 +338,7 @@ static snd_pcm_format_t aud_to_alsafmt (audfmt_e fmt, int endianness)
         }
 
     case AUD_FMT_F:
-        if (endianess) {
+        if (endianness) {
             return SND_PCM_FORMAT_FLOAT_BE;
         }
         else {
