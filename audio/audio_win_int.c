@@ -38,6 +38,7 @@ int waveformat_from_audio_settings (WAVEFORMATEX *wfx,
 
     case AUD_FMT_S32:
     case AUD_FMT_U32:
+    case AUD_FMT_F:
         wfx->wBitsPerSample = 32;
         wfx->nAvgBytesPerSec <<= 2;
         wfx->nBlockAlign <<= 2;

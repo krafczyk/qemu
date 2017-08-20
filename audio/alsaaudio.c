@@ -337,6 +337,14 @@ static snd_pcm_format_t aud_to_alsafmt (audfmt_e fmt, int endianness)
             return SND_PCM_FORMAT_U32_LE;
         }
 
+    case AUD_FMT_F:
+        if (endianess) {
+            return SND_PCM_FORMAT_FLOAT_BE;
+        }
+        else {
+            return SND_PCM_FORMAT_FLOAT_LE;
+        }
+
     default:
         dolog ("Internal logic error: Bad audio format %d\n", fmt);
 #ifdef DEBUG_AUDIO
@@ -399,6 +407,14 @@ static int alsa_to_audfmt (snd_pcm_format_t alsafmt, audfmt_e *fmt,
         *endianness = 1;
         *fmt = AUD_FMT_U32;
         break;
+
+    case SND_PCM_FORMAT_FLOAT_LE:
+        *endianness = 0;
+        *fmt = AUD_FMT_F;
+
+    case SND_PCM_FORMAT_FLOAT_BE:
+        *endianness = 1;
+        *fmt = AUD_FMT_F;
 
     default:
         dolog ("Unrecognized audio format %d\n", alsafmt);
@@ -651,6 +667,7 @@ static int alsa_open (int in, struct alsa_params_req *req,
 
         case AUD_FMT_S32:
         case AUD_FMT_U32:
+        case AUD_FMT_F:
             bytes_per_sec <<= 2;
             break;
         }

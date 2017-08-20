@@ -242,6 +242,9 @@ static const char *audio_audfmt_to_string (audfmt_e fmt)
 
     case AUD_FMT_S32:
         return "S32";
+
+    case AUD_FMT_F:
+        return "F";
     }
 
     dolog ("Bogus audfmt %d returning S16\n", fmt);
@@ -274,6 +277,10 @@ static audfmt_e audio_string_to_audfmt (const char *s, audfmt_e defval,
     else if (!strcasecmp (s, "s32")) {
         *defaultp = 0;
         return AUD_FMT_S32;
+    }
+    else if (!strcasecmp (s, "f")) {
+        *defaultp = 0;
+        return AUD_FMT_F;
     }
     else {
         dolog ("Bogus audio format `%s' using %s\n",
@@ -523,6 +530,9 @@ static void audio_print_settings (struct audsettings *as)
     case AUD_FMT_U32:
         AUD_log (NULL, "U32");
         break;
+    case AUD_FMT_F:
+        AUD_log (NULL, "F");
+        break;
     default:
         AUD_log (NULL, "invalid(%d)", as->fmt);
         break;
@@ -557,6 +567,7 @@ static int audio_validate_settings (struct audsettings *as)
     case AUD_FMT_U16:
     case AUD_FMT_S32:
     case AUD_FMT_U32:
+    case AUD_FMT_F:
         break;
     default:
         invalid = 1;
@@ -591,6 +602,11 @@ static int audio_pcm_info_eq (struct audio_pcm_info *info, struct audsettings *a
     case AUD_FMT_U32:
         bits = 32;
         break;
+
+    case AUD_FMT_F:
+        bits = 32;
+        sign = 1;
+        break;
     }
     return info->freq == as->freq
         && info->nchannels == as->nchannels
@@ -619,6 +635,12 @@ void audio_pcm_init_info (struct audio_pcm_info *info, struct audsettings *as)
     case AUD_FMT_S32:
         sign = 1;
     case AUD_FMT_U32:
+        bits = 32;
+        shift = 2;
+        break;
+
+    case AUD_FMT_F:
+        sign = 1;
         bits = 32;
         shift = 2;
         break;

@@ -35,7 +35,8 @@ typedef enum {
     AUD_FMT_U16,
     AUD_FMT_S16,
     AUD_FMT_U32,
-    AUD_FMT_S32
+    AUD_FMT_S32,
+    AUD_FMT_F
 } audfmt_e;
 
 #ifdef HOST_WORDS_BIGENDIAN
